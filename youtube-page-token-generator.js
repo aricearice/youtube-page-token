@@ -6,6 +6,29 @@ const charSet = [
   ...['-', '_']
 ];
 
+const multiplesOf4kcharSet = Array(26 * 4).fill().map((v, k) => {
+  return `${charSet[Math.floor(k / 4) % charSet.length]}${charSet[(k * 16 + 1) % charSet.length]}A`;
+});
+
+const onesCharSets = Array(4).fill().map((v, k) => {
+  return constructOnesCharSet(k);
+});
+
+const tensCharSets = {
+  A: constructTensCharSet('A'),
+  I: constructTensCharSet('I')
+};
+
+function constructOnesCharSet(startingPosition) {
+  return Array(16).fill().map((val, index) => {
+    return charSet[index * 4 + startingPosition];
+  });
+}
+
+function constructTensCharSet(startChar) {
+  return Array(8).fill().map((v, k) => String.fromCharCode(startChar.charCodeAt(0) + k));
+}
+
 // The following numbers are all in base 16!
 // left-most char is always 'C'
 // second char is an encoding of multiples of 10
@@ -55,19 +78,14 @@ function encodeOnes(val) {
     }
   }
 
-  const onesCharSet = Array(16).fill().map((val, index) => {
-    return charSet[index * 4 + startingPosition];
-  });
-
-  return onesCharSet[val % 16];
+  return onesCharSets[startingPosition][val % 16];
 }
 
 function encodeMultiplesOf10(val) {
-  let startingPosition, len = 8;
+  let startingPosition;
   startingPosition = val < parseInt(80, 16) ? 'A' : 'I';
-  const tensCharSet = Array(len).fill().map((v, k) => String.fromCharCode(startingPosition.charCodeAt(0) + k));
 
-  return tensCharSet[Math.floor(val / parseInt(10, 16)) % len];
+  return tensCharSets[startingPosition][Math.floor(val / parseInt(10, 16)) % 8];
 }
 
 function encodeMultiplesOf80(val) {
@@ -84,10 +102,6 @@ function encodeMultiplesOf4k(val) {
     return 'EA';
   }
   const quotient = Math.floor(val / parseInt(4000, 16));
-
-  const multiplesOf4kcharSet = Array(quotient + 1).fill().map((v, k) => {
-    return `${charSet[Math.floor(k / 4) % charSet.length]}${charSet[(k * 16 + 1) % charSet.length]}A`;
-  });
 
   return multiplesOf4kcharSet[quotient];
 }

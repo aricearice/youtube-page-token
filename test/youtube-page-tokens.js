@@ -5,7 +5,6 @@ const constructPageToken = require(process.cwd() + '/youtube-page-token-generato
 
 describe('Youtube Page Token Generator', function() {
   it('should create the correct token for each index', function() {
-    this.timeout(2500);
     for (let i = 0; i < expectedTokens.length; i++) {
       expect(constructPageToken(i)).to.equal(expectedTokens[i]);
     }
