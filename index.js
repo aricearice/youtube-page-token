@@ -16,13 +16,15 @@
 module.exports = constructPageToken;
 
 function constructPageToken(index, options) {
-  index = parseInt(index, 10);
+  const parsedIndex = parseInt(index, 10);
+  const lowerLimit = 0;
+  const upperLimit = 64 * 4 * parseInt(4000, 16);
 
-  if (isNaN(index)) {
-    throw new Error('Index is not a number!');
+  if (isNaN(parsedIndex)) {
+    throw new TypeError(`${index} is not a number.`);
   }
-  if (index < 0 || index >= (64 * 4 * parseInt(4000, 16))) {
-    throw new Error('Index out of range!');
+  if (parsedIndex < lowerLimit || parsedIndex >= upperLimit) {
+    throw new Error(`${parsedIndex} is out of range (${lowerLimit}, ${upperLimit}].`);
   }
 
   let finalSymbol = 'A';
@@ -30,7 +32,7 @@ function constructPageToken(index, options) {
     finalSymbol = 'Q';
   }
 
-  let tokenArray = ['C', encodeMultiplesOf10(index), encodeOnes(index), encodeMultiplesOf80(index), encodeMultiplesOf4k(index), finalSymbol];
+  let tokenArray = ['C', encodeMultiplesOf10(parsedIndex), encodeOnes(parsedIndex), encodeMultiplesOf80(parsedIndex), encodeMultiplesOf4k(parsedIndex), finalSymbol];
   return tokenArray.filter(each => { return each !== null; }).join('');
 }
 
