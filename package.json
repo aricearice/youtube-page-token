@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aricearice/useful-tools.git"
+    "url": "git+https://github.com/aricearice/youtube-page-token.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/aricearice/useful-tools/issues"
+    "url": "https://github.com/aricearice/youtube-page-token/issues"
   },
-  "homepage": "https://github.com/aricearice/useful-tools#readme",
+  "homepage": "https://github.com/aricearice/youtube-page-token#readme",
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^5.2.0"
