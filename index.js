@@ -1,34 +1,3 @@
-// construct the dict of the possible chars in the pageToken
-const charSet = [
-  ...Array(26).fill().map((v, k) => String.fromCharCode('A'.charCodeAt(0) + k)),
-  ...Array(26).fill().map((v, k) => String.fromCharCode('a'.charCodeAt(0) + k)),
-  ...Array(10).keys(),
-  ...['-', '_']
-];
-
-const multiplesOf4kcharSet = Array(26 * 4).fill().map((v, k) => {
-  return `${charSet[Math.floor(k / 4) % charSet.length]}${charSet[(k * 16 + 1) % charSet.length]}A`;
-});
-
-const onesCharSets = Array(4).fill().map((v, k) => {
-  return constructOnesCharSet(k);
-});
-
-const tensCharSets = {
-  A: constructTensCharSet('A'),
-  I: constructTensCharSet('I')
-};
-
-function constructOnesCharSet(startingPosition) {
-  return Array(16).fill().map((val, index) => {
-    return charSet[index * 4 + startingPosition];
-  });
-}
-
-function constructTensCharSet(startChar) {
-  return Array(8).fill().map((v, k) => String.fromCharCode(startChar.charCodeAt(0) + k));
-}
-
 // The following numbers are all in base 16!
 // left-most char is always 'C'
 // second char is an encoding of multiples of 10
@@ -63,6 +32,37 @@ function constructPageToken(index, options) {
 
   let tokenArray = ['C', encodeMultiplesOf10(index), encodeOnes(index), encodeMultiplesOf80(index), encodeMultiplesOf4k(index), finalSymbol];
   return tokenArray.filter(each => { return each !== null; }).join('');
+}
+
+// construct the dict of the possible chars in the pageToken
+const charSet = [
+  ...Array(26).fill().map((v, k) => String.fromCharCode('A'.charCodeAt(0) + k)),
+  ...Array(26).fill().map((v, k) => String.fromCharCode('a'.charCodeAt(0) + k)),
+  ...Array(10).keys(),
+  ...['-', '_']
+];
+
+const multiplesOf4kcharSet = Array(26 * 4).fill().map((v, k) => {
+  return `${charSet[Math.floor(k / 4) % charSet.length]}${charSet[(k * 16 + 1) % charSet.length]}A`;
+});
+
+const onesCharSets = Array(4).fill().map((v, k) => {
+  return constructOnesCharSet(k);
+});
+
+const tensCharSets = {
+  A: constructTensCharSet('A'),
+  I: constructTensCharSet('I')
+};
+
+function constructOnesCharSet(startingPosition) {
+  return Array(16).fill().map((val, index) => {
+    return charSet[index * 4 + startingPosition];
+  });
+}
+
+function constructTensCharSet(startChar) {
+  return Array(8).fill().map((v, k) => String.fromCharCode(startChar.charCodeAt(0) + k));
 }
 
 function encodeOnes(val) {
