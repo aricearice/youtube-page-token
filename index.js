@@ -10,7 +10,7 @@
 //   if < 4000, always 'EA'
 //   else, an encoding of multiples of 4000
 //
-// This _should_ be able to construct a pageToken for an index in [0, 4194304)
+// This _should_ be able to construct a pageToken for an index in [0, 100000]
 // Although it's only tested up to 10000
 
 module.exports = constructPageToken;
@@ -18,13 +18,13 @@ module.exports = constructPageToken;
 function constructPageToken(index, options) {
   const parsedIndex = parseInt(index, 10);
   const lowerLimit = 0;
-  const upperLimit = 64 * 4 * parseInt(4000, 16);
+  const upperLimit = 100000;
 
   if (isNaN(parsedIndex)) {
     throw new TypeError(`${index} is not a number.`);
   }
-  if (parsedIndex < lowerLimit || parsedIndex >= upperLimit) {
-    throw new Error(`${parsedIndex} is out of range (${lowerLimit}, ${upperLimit}].`);
+  if (parsedIndex < lowerLimit || parsedIndex > upperLimit) {
+    throw new Error(`${parsedIndex} is out of range [${lowerLimit}, ${upperLimit}].`);
   }
 
   let finalSymbol = 'A';
@@ -44,7 +44,7 @@ const charSet = [
   ...['-', '_']
 ];
 
-const multiplesOf4kcharSet = Array(26 * 4).fill().map((v, k) => {
+const multiplesOf4kcharSet = Array(7).fill().map((v, k) => {
   return `${charSet[Math.floor(k / 4) % charSet.length]}${charSet[(k * 16 + 1) % charSet.length]}A`;
 });
 
